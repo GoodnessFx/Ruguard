@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Allow search engines to crawl the main pages
+Allow: /#hero
+Allow: /#features
+Allow: /#token-analysis
+Allow: /#how-it-works
+Allow: /#leaderboard
+
+# Disallow private/sensitive areas
+Disallow: /admin
+Disallow: /api
+Disallow: /auth
+
+Sitemap: https://ruguard.app/sitemap.xml
