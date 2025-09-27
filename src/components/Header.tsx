@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Shield, Menu, X, Wallet } from 'lucide-react';
 import { Button } from './ui/button';
 

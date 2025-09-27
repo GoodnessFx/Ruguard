@@ -9,17 +9,19 @@ export function useAuth() {
   useEffect(() => {
     // Get initial session
     const getSession = async () => {
-      const { data: { session } } = await auth.getSession();
-      setUser(session?.user ?? null);
+      try {
+        const session = await auth.getSession();
+        setUser((session as any)?.user ?? null);
+      } catch {
+        setUser(null);
+      }
       setLoading(false);
     };
 
     getSession();
 
     // Listen for auth changes
-    const {
-      data: { subscription },
-    } = auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = auth.onAuthStateChange((_event: string, session: any) => {
       setUser(session?.user ?? null);
     });
 
@@ -27,27 +29,30 @@ export function useAuth() {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { data, error };
+    try {
+      const data = await auth.signIn(email, password);
+      return { data, error: null } as const;
+    } catch (error: any) {
+      return { data: null, error } as const;
+    }
   };
 
   const signUp = async (email: string, password: string, metadata?: any) => {
-    const { data, error } = await auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata,
-      },
-    });
-    return { data, error };
+    try {
+      const data = await auth.signUp(email, password, metadata);
+      return { data, error: null } as const;
+    } catch (error: any) {
+      return { data: null, error } as const;
+    }
   };
 
   const signOut = async () => {
-    const { error } = await auth.signOut();
-    return { error };
+    try {
+      await auth.signOut();
+      return { error: null } as const;
+    } catch (error: any) {
+      return { error } as const;
+    }
   };
 
   return {
